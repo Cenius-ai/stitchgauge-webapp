@@ -1,0 +1,8 @@
+# StitchGauge runtime dependencies
+#
+# None. The tool imports only the standard library (argparse, math, sys), so
+# there is nothing to install to run it - `python3 stitchgauge.py --help` works
+# on Python 3.8+ as unpacked.
+#
+# The only pinned package is the test runner for the bundled unittest suite.
+pytest==9.1.1

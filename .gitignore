@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.eggs/
+
+# Test / tooling caches
+.pytest_cache/
+.coverage
+
+# Local environment files (this project reads none, but keep them out of git)
+.env
+.venv/
+venv/
+
+# Editor noise
+.DS_Store
+
+# Tool caches (ruff)
+.ruff_cache/
