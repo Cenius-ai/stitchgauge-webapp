@@ -1,0 +1,141 @@
+StitchGauge demo transcript
+===========================
+A real session recorded on Linux with Python 3.11. Section A is a terminal
+capture: every prompt, typed answer and line of output is exactly what the
+program printed (the invalid "abc" width is rejected and re-prompted, and the
+12.0 sts/in yarn lookup reports the out-of-range message). Section B is the
+one-shot form of the same three calculators, captured verbatim from stdout
+(the final invalid run shows its single stderr line and exit status 1).
+
+Numbers used throughout the README:
+  * 40 stitches / 56 rows over 8 x 8 inches               -> 5.00 sts/in, 7.00 rows/in
+  * pattern 5 sts / 7 rows rescaled to 5.5 sts / 7.5 rows -> 110 stitches, 129 rows
+  * 4.0 sts/in                                            -> Worsted (4)
+
+------------------------------------------------------------------------------
+A. Interactive menu - gauge calculator with one rejected value, then an
+   out-of-range yarn gauge, then quit.
+------------------------------------------------------------------------------
+$ python3 stitchgauge.py
+
+StitchGauge - knitting gauge swatch calculator
+==============================================
+
+  1) Gauge calculator
+  2) Adjust for your gauge
+  3) Yarn weight lookup
+  4) Show yarn weight table
+  5) Help
+  6) Quit
+
+Choose 1-6: 1
+Stitch count of your swatch: 40
+Row count of your swatch: 56
+Swatch width in inches: abc
+  ! width must be a number
+Swatch width in inches: 8
+Swatch height in inches: 8
+
+  GAUGE
+  --------------------------------------------------------
+  Stitch count          : 40
+  Row count             : 56
+  Swatch width (in)     : 8.00
+  Swatch height (in)    : 8.00
+  --------------------------------------------------------
+  Stitches per inch     : 5.00
+  Rows per inch         : 7.00
+
+StitchGauge - knitting gauge swatch calculator
+==============================================
+
+  1) Gauge calculator
+  2) Adjust for your gauge
+  3) Yarn weight lookup
+  4) Show yarn weight table
+  5) Help
+  6) Quit
+
+Choose 1-6: 3
+Your gauge in stitches per inch: 12.0
+
+  YARN
+  --------------------------------------------------------
+  Gauge                 : 12.00 sts/in
+  --------------------------------------------------------
+  Category              : (none)
+  Note                  : gauge 12.00 sts/in is outside the built-in table (1.00-10.00 sts/in)
+
+StitchGauge - knitting gauge swatch calculator
+==============================================
+
+  1) Gauge calculator
+  2) Adjust for your gauge
+  3) Yarn weight lookup
+  4) Show yarn weight table
+  5) Help
+  6) Quit
+
+Choose 1-6: 6
+Goodbye.
+
+------------------------------------------------------------------------------
+B. The same three calculators non-interactively
+------------------------------------------------------------------------------
+$ python3 stitchgauge.py gauge --stitches 40 --rows 56 --width 8 --height 8
+
+  GAUGE
+  --------------------------------------------------------
+  Stitch count          : 40
+  Row count             : 56
+  Swatch width (in)     : 8.00
+  Swatch height (in)    : 8.00
+  --------------------------------------------------------
+  Stitches per inch     : 5.00
+  Rows per inch         : 7.00
+
+$ python3 stitchgauge.py adjust --pattern-sts 5 --pattern-rows 7 --your-sts 5.5 --your-rows 7.5 --stitches 100 --rows 120
+
+  ADJUSTMENT
+  --------------------------------------------------------
+  Pattern stitch gauge  : 5.00 sts/in
+  Pattern row gauge     : 7.00 rows/in
+  Your stitch gauge     : 5.50 sts/in
+  Your row gauge        : 7.50 rows/in
+  --------------------------------------------------------
+  Stitch ratio          : 1.10
+  Pattern stitches      : 100
+  Adjusted stitches     : 110
+  Row ratio             : 1.07
+  Pattern rows          : 120
+  Adjusted rows         : 129
+
+$ python3 stitchgauge.py yarn --gauge 4.0
+
+  YARN
+  --------------------------------------------------------
+  Gauge                 : 4.00 sts/in
+  --------------------------------------------------------
+  Category              : Worsted (4)
+  Range                 : 3.50-4.49 sts/in
+
+$ python3 stitchgauge.py yarn --table
+
+  YARN WEIGHT TABLE - standard CYC categories
+  --------------------------------------------------------
+  CYC  Category     Stitches per inch
+  ---  -----------  -----------------
+    6  Super Bulky  1.00-2.49
+    5  Bulky        2.50-3.49
+    4  Worsted      3.50-4.49
+    3  DK           4.50-5.49
+    2  Sport        5.50-6.49
+    1  Fingering    6.50-7.99
+    0  Lace         8.00-10.00
+
+  Ranges are inclusive; anything outside 1.00-10.00 sts/in
+  is reported as out of range instead of being rounded to a category.
+
+$ python3 stitchgauge.py gauge --stitches 40 --rows 56 --width 0 --height 8
+error: width must be greater than zero
+(exit status 1 - invalid value, no result block on stdout)
